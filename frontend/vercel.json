@@ -1,0 +1,5 @@
+﻿{
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://job-search-agent-myvr.onrender.com/api/:path*" }
+  ]
+}
