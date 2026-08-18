@@ -1,0 +1,371 @@
+{
+  "portals": [
+    {
+      "id": "linkedin",
+      "name": "LinkedIn Jobs",
+      "type": "enterprise_board",
+      "category": "official_enterprise",
+      "scrapable": true,
+      "direct_scrape": false,
+      "job_type_parsing": "per_listing",
+      "t1": {
+        "enabled": false,
+        "type": "partner_api",
+        "status": "partner_oauth_required",
+        "note": "LinkedIn Talent Solutions API — requires approved partnership. Integration point built; activate when partnership exists.",
+        "scrapable": false,
+        "reason": "ToS-restricted — enterprise partnership required"
+      },
+      "t2": {
+        "enabled": false,
+        "scrapable": false,
+        "reason": "ToS-restricted — do not scrape directly"
+      },
+      "t3": {
+        "enabled": false,
+        "scrapable": false,
+        "reason": "ToS-restricted — do not scrape directly"
+      },
+      "t4": {
+        "enabled": true,
+        "primary": "google_jobs_serpapi",
+        "aggregators": ["google_jobs"],
+        "scope_query": "site:linkedin.com/jobs",
+        "source_note": "via Google Jobs aggregation, not scraped directly"
+      },
+      "t5": { "enabled": true, "cache_fallback": true, "alert_on_failure": true }
+    },
+    {
+      "id": "indeed",
+      "name": "Indeed",
+      "type": "enterprise_board",
+      "category": "official_enterprise",
+      "scrapable": true,
+      "direct_scrape": false,
+      "job_type_parsing": "per_listing",
+      "t1": {
+        "enabled": false,
+        "type": "publisher_api",
+        "status": "build_time_check_required",
+        "note": "Indeed Publisher/Partner API — historically restricted for new self-serve applicants. Build-time check required; logs WARNING if unavailable rather than failing silently.",
+        "scrapable": false,
+        "reason": "ToS-restricted — publisher API access required; new self-serve applicants historically blocked"
+      },
+      "t2": {
+        "enabled": false,
+        "scrapable": false,
+        "reason": "ToS-restricted — do not scrape directly"
+      },
+      "t3": {
+        "enabled": false,
+        "scrapable": false,
+        "reason": "ToS-restricted — do not scrape directly"
+      },
+      "t4": {
+        "enabled": true,
+        "primary": "google_jobs_serpapi",
+        "aggregators": ["google_jobs"],
+        "scope_query": "site:indeed.com/viewjob",
+        "source_note": "via Google Jobs aggregation, not scraped directly"
+      },
+      "t5": { "enabled": true, "cache_fallback": true, "alert_on_failure": true }
+    },
+    {
+      "id": "glassdoor",
+      "name": "Glassdoor",
+      "type": "enterprise_board",
+      "category": "official_enterprise",
+      "scrapable": true,
+      "direct_scrape": false,
+      "job_type_parsing": "per_listing",
+      "t1": {
+        "enabled": false,
+        "type": "partner_api",
+        "status": "enterprise_partnership_required",
+        "note": "Glassdoor Partner API — enterprise-partnership only. Integration point built; do not attempt unauthorized access.",
+        "scrapable": false,
+        "reason": "ToS-restricted — enterprise partnership required"
+      },
+      "t2": {
+        "enabled": false,
+        "scrapable": false,
+        "reason": "ToS-restricted — do not scrape directly"
+      },
+      "t3": {
+        "enabled": false,
+        "scrapable": false,
+        "reason": "ToS-restricted — do not scrape directly"
+      },
+      "t4": {
+        "enabled": true,
+        "primary": "google_jobs_serpapi",
+        "aggregators": ["google_jobs"],
+        "scope_query": "site:glassdoor.com/job-listing",
+        "source_note": "via Google Jobs aggregation, not scraped directly"
+      },
+      "t5": { "enabled": true, "cache_fallback": true, "alert_on_failure": true }
+    },
+    {
+      "id": "dice",
+      "name": "Dice",
+      "type": "tech_job_board",
+      "category": "remote_boards_aggregators",
+      "scrapable": true,
+      "job_type_parsing": "per_listing",
+      "t1": {
+        "enabled": true,
+        "type": "rss",
+        "url": "https://www.dice.com/jobs/q-developer-l-Remote.rss",
+        "build_time_verify": true,
+        "verify_note": "Verify RSS feed URL is still returning valid RSS at build time; fall through to T3 if feed returns non-RSS or HTTP error",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t2": {
+        "enabled": true,
+        "type": "apify_store",
+        "build_time_check": true,
+        "search_query": "dice jobs scraper",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t3": {
+        "enabled": true,
+        "strategy": "playwright_spa",
+        "url": "https://www.dice.com/jobs",
+        "sitemap": "https://www.dice.com/sitemap.xml",
+        "note": "React-based SPA — requires Playwright; attempt sitemap.xml discovery first",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t4": {
+        "enabled": true,
+        "primary": "google_jobs_serpapi",
+        "aggregators": ["google_jobs"],
+        "scope_query": "site:dice.com/job-detail",
+        "note": "Cross-check via Google Jobs",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t5": { "enabled": true, "cache_fallback": true, "alert_on_failure": true }
+    },
+    {
+      "id": "ziprecruiter",
+      "name": "ZipRecruiter",
+      "type": "job_aggregator",
+      "category": "remote_boards_aggregators",
+      "scrapable": true,
+      "job_type_parsing": "per_listing",
+      "t1": {
+        "enabled": false,
+        "type": "partner_api",
+        "status": "manual_approval_required",
+        "note": "ZipRecruiter Partner/Publisher API requires application and approval — not instant self-serve. Integration point built. Do not block pipeline waiting on it; fall through to T3 in the meantime.",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t2": {
+        "enabled": true,
+        "type": "apify_store",
+        "build_time_check": true,
+        "search_query": "ziprecruiter jobs scraper",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t3": {
+        "enabled": true,
+        "strategy": "playwright_spa",
+        "url": "https://www.ziprecruiter.com/candidate/search",
+        "sitemap": "https://www.ziprecruiter.com/sitemap.xml",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t4": {
+        "enabled": true,
+        "primary": "google_jobs_serpapi",
+        "aggregators": ["google_jobs"],
+        "scope_query": "site:ziprecruiter.com/jobs",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t5": { "enabled": true, "cache_fallback": true, "alert_on_failure": true }
+    },
+    {
+      "id": "usajobs",
+      "name": "USAJOBS",
+      "type": "government_board",
+      "category": "remote_boards_aggregators",
+      "scrapable": true,
+      "country_code": "US",
+      "eligibility_note": "U.S. federal employment — typically requires U.S. citizenship",
+      "job_type_parsing": "per_listing",
+      "t1": {
+        "enabled": true,
+        "type": "official_api",
+        "url": "https://data.usajobs.gov/api/search",
+        "auth_header": "Authorization-Key",
+        "user_agent_header": "contact_email",
+        "env_key": "USAJOBS_API_KEY",
+        "env_email": "USAJOBS_EMAIL",
+        "note": "Official USAJOBS Search API (developer.usajobs.gov) — most reliable T1 of all 10. Sole/primary source; T2/T3/T4 not needed.",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t2": { "enabled": false, "note": "Not needed — T1 fully covers this source" },
+      "t3": { "enabled": false, "note": "Not needed — T1 fully covers this source" },
+      "t4": { "enabled": false, "note": "Not needed — T1 fully covers this source" },
+      "t5": { "enabled": true, "cache_fallback": true, "alert_on_failure": true, "note": "For API downtime only — expected to be rare" }
+    },
+    {
+      "id": "careerbuilder",
+      "name": "CareerBuilder",
+      "type": "job_aggregator",
+      "category": "remote_boards_aggregators",
+      "scrapable": true,
+      "job_type_parsing": "per_listing",
+      "t1": {
+        "enabled": false,
+        "type": "developer_api",
+        "status": "build_time_check_required",
+        "note": "CareerBuilder developer API — historically free-tier available. Build-time check required; fall through to T3 if unavailable.",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t2": {
+        "enabled": true,
+        "type": "apify_store",
+        "build_time_check": true,
+        "search_query": "careerbuilder jobs scraper",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t3": {
+        "enabled": true,
+        "strategy": "cheerio_first_playwright_fallback",
+        "url": "https://www.careerbuilder.com/jobs",
+        "sitemap": "https://www.careerbuilder.com/sitemap.xml",
+        "note": "Cheerio static scrape first (cheaper); fall to Playwright if content not in initial HTML. Attempt sitemap.xml discovery first.",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t4": {
+        "enabled": true,
+        "primary": "google_jobs_serpapi",
+        "aggregators": ["google_jobs"],
+        "scope_query": "site:careerbuilder.com/job",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t5": { "enabled": true, "cache_fallback": true, "alert_on_failure": true }
+    },
+    {
+      "id": "simplyhired",
+      "name": "SimplyHired",
+      "type": "job_aggregator",
+      "category": "remote_boards_aggregators",
+      "scrapable": true,
+      "job_type_parsing": "per_listing",
+      "dedup_note": "Expect overlap with Indeed (same parent company Indeed Inc). Rely on existing dedup hash logic (title + company + platform_id + posted_date) rather than artificially separating the two sources.",
+      "t1": {
+        "enabled": false,
+        "type": "public_api",
+        "status": "unavailable",
+        "note": "No confirmed current public API — marked unavailable. Verify before assuming.",
+        "scrapable": false,
+        "reason": "No confirmed public API"
+      },
+      "t2": {
+        "enabled": true,
+        "type": "apify_store",
+        "build_time_check": true,
+        "search_query": "simplyhired jobs scraper",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t3": {
+        "enabled": true,
+        "strategy": "playwright_cheerio",
+        "url": "https://www.simplyhired.com/search",
+        "sitemap": "https://www.simplyhired.com/sitemap.xml",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t4": {
+        "enabled": true,
+        "primary": "google_jobs_serpapi",
+        "aggregators": ["google_jobs"],
+        "scope_query": "site:simplyhired.com/job",
+        "note": "Expect and allow overlap with Indeed source — rely on dedup hash logic",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t5": { "enabled": true, "cache_fallback": true, "alert_on_failure": true }
+    },
+    {
+      "id": "weworkremotely",
+      "name": "We Work Remotely",
+      "type": "remote_board",
+      "category": "remote_boards_aggregators",
+      "scrapable": true,
+      "job_type_parsing": "per_listing",
+      "note": "Mixes full-time, contract, and part-time — do NOT hardcode job_type. Parse per-listing.",
+      "t1": {
+        "enabled": true,
+        "type": "rss",
+        "url": "https://weworkremotely.com/remote-jobs.rss",
+        "categorized_feeds": [
+          "https://weworkremotely.com/categories/remote-programming-jobs.rss",
+          "https://weworkremotely.com/categories/remote-devops-sysadmin-jobs.rss",
+          "https://weworkremotely.com/categories/remote-design-jobs.rss",
+          "https://weworkremotely.com/categories/remote-product-jobs.rss"
+        ],
+        "note": "Official categorized RSS feeds — confirmed, reliable. Primary and preferred source.",
+        "retry": { "attempts": 3, "strategy": "exponential_backoff", "initial_delay_s": 1.0 }
+      },
+      "t2": { "enabled": false, "note": "Not needed — T1 covers this well" },
+      "t3": {
+        "enabled": true,
+        "strategy": "cheerio_soup_static",
+        "url": "https://weworkremotely.com",
+        "note": "Cheerio backup ONLY — triggered if RSS parsing fails unexpectedly"
+      },
+      "t4": {
+        "enabled": true,
+        "primary": "google_jobs_serpapi",
+        "aggregators": ["google_jobs"],
+        "scope_query": "site:weworkremotely.com",
+        "note": "Minor supplemental source — occasionally indexed by Google Jobs"
+      },
+      "t5": { "enabled": true, "cache_fallback": true, "alert_on_failure": true }
+    },
+    {
+      "id": "hired",
+      "name": "Hired",
+      "type": "staffing_vendor",
+      "category": "remote_staffing_vendors",
+      "scrapable": true,
+      "data_completeness": "limited",
+      "low_yield_platform": true,
+      "job_type_parsing": "per_listing",
+      "low_yield_note": "Candidate-matching platform, not an open listing board. Low yield is expected platform behavior, not a scraper failure. Excluded from standard Tier 5 failure-alert threshold.",
+      "t1": {
+        "enabled": false,
+        "type": "public_api",
+        "status": "unavailable",
+        "note": "No public API — candidate-matching platform, not an open listing board.",
+        "scrapable": false,
+        "reason": "No public API — platform architecture does not expose open listings"
+      },
+      "t2": {
+        "enabled": true,
+        "type": "apify_store",
+        "build_time_check": true,
+        "search_query": "hired.com jobs scraper",
+        "note": "Low likelihood of a matching actor given platform structure — check anyway"
+      },
+      "t3": {
+        "enabled": true,
+        "strategy": "playwright_spa",
+        "url": "https://hired.com/jobs",
+        "note": "Narrowly scoped to whatever public job/company pages actually exist. Do not over-engineer. Low yield is expected platform behavior."
+      },
+      "t4": {
+        "enabled": true,
+        "primary": "google_jobs_serpapi",
+        "aggregators": ["google_jobs"],
+        "scope_query": "site:hired.com/jobs",
+        "note": "Low expected yield — attempt anyway as low-cost supplemental"
+      },
+      "t5": {
+        "enabled": true,
+        "cache_fallback": true,
+        "alert_on_failure": false,
+        "note": "This platform relies on T5 most heavily of the 10. Exclude from standard failure-alert threshold."
+      }
+    }
+  ]
+}

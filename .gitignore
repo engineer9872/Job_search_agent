@@ -1,0 +1,11 @@
+﻿node_modules/
+frontend/node_modules/
+frontend/dist/
+.env
+__pycache__/
+*.pyc
+venv/
+*.db
+jobs_dev.db
+Scheduler/method_health.json
+Scheduler/quota_tracker.json
